@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>California House Predictor</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            font-family: "Inter", sans-serif;
+
+            min-height: 100vh;
+
+            color: #ffffff;
+
+            background:
+                radial-gradient(
+                    circle at 10% 20%,
+                    rgba(124, 58, 237, 0.45),
+                    transparent 35%
+                ),
+
+                radial-gradient(
+                    circle at 90% 10%,
+                    rgba(236, 72, 153, 0.35),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at 80% 90%,
+                    rgba(6, 182, 212, 0.30),
+                    transparent 35%
+                ),
+
+                #080b18;
+
+            padding: 40px 20px;
+
+            overflow-x: hidden;
+        }
+
+
+        /* Background floating circles */
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            width: 300px;
+            height: 300px;
+
+            background: linear-gradient(
+                135deg,
+                #7c3aed,
+                #ec4899
+            );
+
+            border-radius: 50%;
+
+            filter: blur(100px);
+
+            opacity: 0.25;
+
+            top: -100px;
+            left: -100px;
+
+            z-index: -1;
+        }
+
+
+        body::after {
+
+            content: "";
+
+            position: fixed;
+
+            width: 300px;
+            height: 300px;
+
+            background: linear-gradient(
+                135deg,
+                #06b6d4,
+                #3b82f6
+            );
+
+            border-radius: 50%;
+
+            filter: blur(100px);
+
+            opacity: 0.2;
+
+            bottom: -100px;
+            right: -100px;
+
+            z-index: -1;
+        }
+
+
+        /* Main container */
+
+        .container {
+
+            width: 100%;
+
+            max-width: 1100px;
+
+            margin: auto;
+        }
+
+
+        /* Header */
+
+        .header {
+
+            text-align: center;
+
+            margin-bottom: 35px;
+        }
+
+
+        .badge {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 8px 16px;
+
+            border-radius: 50px;
+
+            background: rgba(255,255,255,0.08);
+
+            border: 1px solid rgba(255,255,255,0.12);
+
+            backdrop-filter: blur(15px);
+
+            font-size: 13px;
+
+            color: #d8b4fe;
+
+            margin-bottom: 20px;
+        }
+
+
+        .badge-dot {
+
+            width: 7px;
+            height: 7px;
+
+            background: #a78bfa;
+
+            border-radius: 50%;
+
+            box-shadow: 0 0 12px #a78bfa;
+        }
+
+
+        .header h1 {
+
+            font-size: clamp(36px, 6vw, 64px);
+
+            font-weight: 800;
+
+            letter-spacing: -2px;
+
+            line-height: 1.05;
+
+            background: linear-gradient(
+                90deg,
+                #ffffff,
+                #c4b5fd,
+                #f9a8d4
+            );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            margin-bottom: 15px;
+        }
+
+
+        .header p {
+
+            max-width: 650px;
+
+            margin: auto;
+
+            color: #a8aec3;
+
+            font-size: 16px;
+
+            line-height: 1.7;
+        }
+
+
+        /* Main card */
+
+        .card {
+
+            position: relative;
+
+            background: rgba(255,255,255,0.055);
+
+            border: 1px solid rgba(255,255,255,0.12);
+
+            backdrop-filter: blur(25px);
+
+            -webkit-backdrop-filter: blur(25px);
+
+            border-radius: 28px;
+
+            padding: 35px;
+
+            box-shadow:
+                0 25px 80px rgba(0,0,0,0.35);
+
+            overflow: hidden;
+        }
+
+
+        .card::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 2px;
+
+            background: linear-gradient(
+                90deg,
+                #8b5cf6,
+                #ec4899,
+                #06b6d4
+            );
+        }
+
+
+        /* Card heading */
+
+        .card-heading {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 30px;
+        }
+
+
+        .icon {
+
+            width: 50px;
+            height: 50px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 15px;
+
+            font-size: 25px;
+
+            background: linear-gradient(
+                135deg,
+                #7c3aed,
+                #ec4899
+            );
+
+            box-shadow:
+                0 10px 30px rgba(124,58,237,0.3);
+        }
+
+
+        .card-heading h2 {
+
+            font-size: 21px;
+
+            font-weight: 700;
+        }
+
+
+        .card-heading p {
+
+            color: #8f96ad;
+
+            font-size: 13px;
+
+            margin-top: 4px;
+        }
+
+
+        /* Input grid */
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+        }
+
+
+        .input-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+        }
+
+
+        .input-group label {
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            color: #cbd0df;
+
+            text-transform: capitalize;
+        }
+
+
+        .input-wrapper {
+
+            position: relative;
+        }
+
+
+        .input-wrapper span {
+
+            position: absolute;
+
+            left: 15px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: #8b5cf6;
+
+            font-size: 14px;
+        }
+
+
+        .input-group input {
+
+            width: 100%;
+
+            padding: 14px 16px 14px 42px;
+
+            border-radius: 13px;
+
+            border: 1px solid rgba(255,255,255,0.10);
+
+            outline: none;
+
+            background: rgba(0,0,0,0.20);
+
+            color: #ffffff;
+
+            font-size: 14px;
+
+            font-family: inherit;
+
+            transition: 0.25s ease;
+        }
+
+
+        .input-group input::placeholder {
+
+            color: #5f667a;
+        }
+
+
+        .input-group input:focus {
+
+            border-color: #8b5cf6;
+
+            background: rgba(124,58,237,0.08);
+
+            box-shadow:
+                0 0 0 3px rgba(139,92,246,0.10),
+                0 10px 30px rgba(0,0,0,0.15);
+        }
+
+
+        /* Button */
+
+        .button-container {
+
+            margin-top: 30px;
+        }
+
+
+        .predict-btn {
+
+            position: relative;
+
+            width: 100%;
+
+            border: none;
+
+            outline: none;
+
+            padding: 17px;
+
+            border-radius: 15px;
+
+            color: white;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            font-family: inherit;
+
+            cursor: pointer;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #7c3aed,
+                    #ec4899,
+                    #06b6d4
+                );
+
+            background-size: 200% auto;
+
+            transition: 0.3s ease;
+
+            box-shadow:
+                0 15px 35px rgba(124,58,237,0.25);
+        }
+
+
+        .predict-btn:hover {
+
+            background-position: right center;
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 20px 45px rgba(124,58,237,0.35);
+        }
+
+
+        .predict-btn:active {
+
+            transform: translateY(0);
+        }
+
+
+        /* Prediction result */
+
+        .result {
+
+            margin-top: 25px;
+
+            padding: 25px;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(124,58,237,0.15),
+                    rgba(6,182,212,0.08)
+                );
+
+            border: 1px solid rgba(139,92,246,0.25);
+
+            text-align: center;
+        }
+
+
+        .result-title {
+
+            color: #9ca3af;
+
+            font-size: 13px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .result-value {
+
+            font-size: 35px;
+
+            font-weight: 800;
+
+            background: linear-gradient(
+                90deg,
+                #c4b5fd,
+                #f9a8d4,
+                #67e8f9
+            );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+        }
+
+
+        /* Footer */
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: #666d82;
+
+            font-size: 12px;
+        }
+
+
+        /* Responsive */
+
+        @media (max-width: 700px) {
+
+            body {
+
+                padding: 25px 15px;
+            }
+
+
+            .card {
+
+                padding: 22px;
+
+                border-radius: 22px;
+            }
+
+
+            .form-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .header h1 {
+
+                letter-spacing: -1px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="badge">
+
+            <span class="badge-dot"></span>
+
+            AI Powered Prediction
+
+        </div>
+
+
+        <h1>
+            California House<br>
+            Price Predictor
+        </h1>
+
+
+        <p>
+
+            Enter the property details below and let our
+            machine learning model estimate the median
+            house value for your property.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- MAIN CARD -->
+
+    <div class="card">
+
+
+        <div class="card-heading">
+
+            <div class="icon">
+                🏠
+            </div>
+
+
+            <div>
+
+                <h2>
+                    Property Information
+                </h2>
+
+                <p>
+                    Enter the details used by the prediction model
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- FORM -->
+
+        <form action="/predict" method="GET">
+
+
+            <div class="form-grid">
+
+
+                <!--
+                    Flask will automatically create
+                    inputs based on your model columns.
+                -->
+
+                {% for column in columns %}
+
+                <div class="input-group">
+
+                    <label for="{{ column }}">
+
+                        {{ column.replace('_', ' ') }}
+
+                    </label>
+
+
+                    <div class="input-wrapper">
+
+                        <span>◆</span>
+
+                        <input
+
+                            type="number"
+
+                            step="any"
+
+                            id="{{ column }}"
+
+                            name="{{ column }}"
+
+                            placeholder="Enter {{ column.replace('_', ' ') }}"
+
+                            required
+
+                        >
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+
+            </div>
+
+
+
+            <!-- BUTTON -->
+
+            <div class="button-container">
+
+                <button
+                    type="submit"
+                    class="predict-btn"
+                >
+
+                    ✨ Predict House Value
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+
+
+        <!-- RESULT -->
+
+        {% if prediction %}
+
+        <div class="result">
+
+            <div class="result-title">
+
+                Estimated Median House Value in Millions
+
+            </div>
+
+
+            <div class="result-value">
+
+                ${{ prediction }} M 
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+
+
+    <div class="footer">
+
+        Powered by Machine Learning • Flask • Scikit-learn
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>
